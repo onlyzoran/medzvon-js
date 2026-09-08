@@ -56,3 +56,26 @@ export const RESCHEDULE_CONTEXT_MARKERS = new Set([
   'дата',
   'время',
 ]);
+
+export const HOMOPHONE_REPLACEMENTS = [
+  { wrong: 'принести', correct: 'перенести', requiresContext: true },
+];
+
+export const FAREWELL_WORDS = new Set([
+  'спасибо',
+  'благодарю',
+  'до',
+  'свидания',
+  'свидание',
+  'пока',
+  'досвидания',
+]);
+
+export const DECISION_THRESHOLDS = {
+  minConfidence: 0.35,
+  ambiguityGap: 0.15,
+  gibberishUnknownRatio: 0.5,
+  fuzzyMatchMaxDistance: 2,
+  fuzzyMatchMinWordLength: 4,
+  fuzzyWeightFactor: 0.7,
+};
