@@ -1,3 +1,5 @@
+import { Intent } from '../src/types.js';
+
 export const STOP_PHRASES = ['это самое', 'типа того', 'как бы'];
 
 export const STOP_WORDS = new Set([
@@ -56,6 +58,18 @@ export const RESCHEDULE_CONTEXT_MARKERS = new Set([
   'дата',
   'время',
 ]);
+
+export const INTENT_PATTERNS = {
+  [Intent.BOOK]: {
+    keywords: [
+      { word: 'записаться', weight: 1.0 },
+      { word: 'можно', weight: 0.3 },
+    ],
+    phrases: [
+      { phrase: ['хочу', 'записаться'], weight: 1.0 },
+    ],
+  }
+};
 
 export const HOMOPHONE_REPLACEMENTS = [
   { wrong: 'принести', correct: 'перенести', requiresContext: true },
