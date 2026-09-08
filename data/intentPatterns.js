@@ -1,3 +1,5 @@
+export const STOP_PHRASES = ['это самое', 'типа того', 'как бы'];
+
 export const STOP_WORDS = new Set([
   'ну',
   'вот',
