@@ -1,0 +1,9 @@
+export const Intent = {
+    BOOK: 'BOOK',
+    CANCEL: 'CANCEL',
+    RESCHEDULE: 'RESCHEDULE',
+    INFO: 'INFO',
+    OPERATOR: 'OPERATOR',
+    COMPLAINT: 'COMPLAINT',
+    UNCLEAR: 'UNCLEAR',
+};
