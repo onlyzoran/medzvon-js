@@ -15,6 +15,26 @@ const BRIEF_EXAMPLES = [
     intent: Intent.INFO,
   },
   {
+    text: 'это безобразие я час жду на линии хочу пожаловаться',
+    intent: Intent.COMPLAINT,
+  },
+  {
+    text: 'хочу за писаться к врачу на вторник',
+    intent: Intent.BOOK,
+  },
+  {
+    text: 'мне ну это самое отменить наверное запись',
+    intent: Intent.CANCEL,
+  },
+  {
+    text: 'скока стоит прием у лора',
+    intent: Intent.INFO,
+  },
+  {
+    text: 'хочу с человеком поговорить а не с роботом',
+    intent: Intent.OPERATOR,
+  },
+  {
     text: 'принести запись на среду вместо четверга',
     intent: Intent.RESCHEDULE,
   },

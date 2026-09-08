@@ -10,7 +10,9 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "cli": "node src/cli.js"
   },
   "devDependencies": {
     "vitest": "^2.1.8"

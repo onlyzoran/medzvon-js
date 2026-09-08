@@ -8,6 +8,11 @@ import { Intent } from '../types.js';
 function createEmptyScores() {
     return {
         [Intent.BOOK]: 0,
+        [Intent.CANCEL]: 0,
+        [Intent.RESCHEDULE]: 0,
+        [Intent.INFO]: 0,
+        [Intent.OPERATOR]: 0,
+        [Intent.COMPLAINT]: 0,
     };
 }
 
@@ -54,6 +59,36 @@ function phraseMatches(tokens, phrase) {
 export function scoreIntents(tokens) {
     const scores = createEmptyScores();
     const tokenBestMatch = new Map();
+
+    for (const [intentKey, pattern] of Object.entries(INTENT_PATTERNS)) {
+        const intent = intentKey;
+        tokenBestMatch.clear();
+
+        for (const { word, weight } of pattern.keywords) {
+            for (const token of tokens) {
+                const { matched, factor } = matchKeyword(token, word);
+                if (matched) {
+                    const contribution = weight * factor;
+                    const tokenBest = tokenBestMatch.get(`${intent}:${token}`) ?? 0;
+                    if (contribution > tokenBest) {
+                        tokenBestMatch.set(`${intent}:${token}`, contribution);
+                    }
+                }
+            }
+        }
+
+        for (const [key, contribution] of tokenBestMatch.entries()) {
+            if (key.startsWith(`${intent}:`)) {
+                scores[intent] += contribution;
+            }
+        }
+
+        for (const { phrase, weight } of pattern.phrases) {
+            if (phraseMatches(tokens, phrase)) {
+                scores[intent] += weight;
+            }
+        }
+    }
 
     return scores;
 }
