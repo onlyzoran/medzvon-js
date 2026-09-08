@@ -3,6 +3,7 @@ import { Intent } from '../src/types.js';
 /** Заполнители речи — не несут намерения */
 export const STOP_PHRASES = ['это самое', 'типа того', 'как бы'];
 
+/** Только слова-заполнители; служебные слова сохраняем для phrase-matching и STT-repair */
 export const STOP_WORDS = new Set([
   'ну',
   'вот',
@@ -61,6 +62,7 @@ export const STOP_WORDS = new Set([
   'the',
 ]);
 
+/** Склейка разорванных STT-слов */
 export const SPLIT_REPAIRS = [
   { prefix: 'за', suffix: 'писаться', whole: 'записаться' },
   { prefix: 'за', suffix: 'писать', whole: 'записать' },
@@ -71,6 +73,7 @@ export const SPLIT_REPAIRS = [
   { prefix: 'по', suffix: 'жаловаться', whole: 'пожаловаться' },
 ];
 
+/** Маркеры контекста переноса записи (для disambiguation «принести» → «перенести») */
 export const RESCHEDULE_CONTEXT_MARKERS = new Set([
   'запись',
   'записи',
@@ -168,7 +171,101 @@ export const INTENT_PATTERNS = {
       { phrase: ['отменить', 'запись'], weight: 1.3 },
       { phrase: ['отмена', 'записи'], weight: 1.2 },
     ],
-  }
+  },
+  [Intent.RESCHEDULE]: {
+    keywords: [
+      { word: 'перенести', weight: 1.0 },
+      { word: 'перенос', weight: 0.9 },
+      { word: 'перенесите', weight: 0.9 },
+      { word: 'вместо', weight: 0.8 },
+      { word: 'другой', weight: 0.5 },
+      { word: 'другую', weight: 0.5 },
+      { word: 'другого', weight: 0.5 },
+      { word: 'запись', weight: 0.4 },
+      { word: 'записи', weight: 0.4 },
+      { word: 'записью', weight: 0.4 },
+    ],
+    phrases: [
+      { phrase: ['перенести', 'запись'], weight: 1.3 },
+      { phrase: ['запись', 'вместо'], weight: 1.1 },
+      { phrase: ['вместо', 'четверга'], weight: 0.8 },
+    ],
+  },
+  [Intent.INFO]: {
+    keywords: [
+      { word: 'сколько', weight: 1.0 },
+      { word: 'скока', weight: 1.0 },
+      { word: 'скоко', weight: 1.0 },
+      { word: 'стоит', weight: 0.9 },
+      { word: 'стоимость', weight: 0.9 },
+      { word: 'цена', weight: 0.9 },
+      { word: 'цену', weight: 0.9 },
+      { word: 'адрес', weight: 0.9 },
+      { word: 'адреса', weight: 0.9 },
+      { word: 'график', weight: 0.9 },
+      { word: 'графика', weight: 0.9 },
+      { word: 'работаете', weight: 0.7 },
+      { word: 'работает', weight: 0.7 },
+      { word: 'находитесь', weight: 0.7 },
+      { word: 'где', weight: 0.6 },
+      { word: 'когда', weight: 0.5 },
+      { word: 'скажите', weight: 0.4 },
+      { word: 'подскажите', weight: 0.4 },
+      { word: 'прием', weight: 0.3 },
+      { word: 'врач', weight: 0.3 },
+      { word: 'кардиолог', weight: 0.3 },
+      { word: 'лор', weight: 0.3 },
+    ],
+    phrases: [
+      { phrase: ['сколько', 'стоит'], weight: 1.3 },
+      { phrase: ['стоимость', 'приема'], weight: 1.1 },
+    ],
+  },
+  [Intent.OPERATOR]: {
+    keywords: [
+      { word: 'человек', weight: 1.0 },
+      { word: 'человеком', weight: 1.0 },
+      { word: 'люди', weight: 0.7 },
+      { word: 'оператор', weight: 1.0 },
+      { word: 'оператора', weight: 1.0 },
+      { word: 'робот', weight: 0.9 },
+      { word: 'роботом', weight: 0.9 },
+      { word: 'робота', weight: 0.9 },
+      { word: 'живой', weight: 0.8 },
+      { word: 'живого', weight: 0.8 },
+      { word: 'менеджер', weight: 0.7 },
+      { word: 'сотрудник', weight: 0.7 },
+      { word: 'поговорить', weight: 0.5 },
+    ],
+    phrases: [
+      { phrase: ['с', 'человеком'], weight: 1.1 },
+      { phrase: ['не', 'с', 'роботом'], weight: 1.2 },
+      { phrase: ['живой', 'человек'], weight: 1.1 },
+    ],
+  },
+  [Intent.COMPLAINT]: {
+    keywords: [
+      { word: 'жалоба', weight: 1.0 },
+      { word: 'жалобу', weight: 1.0 },
+      { word: 'пожаловаться', weight: 1.0 },
+      { word: 'жалуюсь', weight: 0.9 },
+      { word: 'безобразие', weight: 1.0 },
+      { word: 'ужас', weight: 0.8 },
+      { word: 'кошмар', weight: 0.8 },
+      { word: 'жду', weight: 0.7 },
+      { word: 'ожидание', weight: 0.6 },
+      { word: 'линия', weight: 0.5 },
+      { word: 'линии', weight: 0.5 },
+      { word: 'час', weight: 0.4 },
+      { word: 'плохо', weight: 0.6 },
+      { word: 'недоволен', weight: 0.8 },
+      { word: 'недовольна', weight: 0.8 },
+    ],
+    phrases: [
+      { phrase: ['хочу', 'пожаловаться'], weight: 1.2 },
+      { phrase: ['час', 'жду'], weight: 1.0 },
+    ],
+  },
 };
 
 /** Общий словарь для детекции gibberish */
